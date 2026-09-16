@@ -19,13 +19,24 @@
 
     </ul>
 
+    <button id="del">削除</button>
 
-<script>
+
+
+<script>//「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
-        document.getElementById("input").value;
+
+        //「新しい<li>要素を作って、それをliという名前で扱えるようにする」//
+        const li = document.createElement("li");
+
+        //「id="input" の入力欄に入っている文字を取得して、その文字をliの中身として設定する」//
+        li.textContent = document.getElementById("input").value;
+
+        //「ulを探して、さっき作ったliをulの子要素として追加する」//
+        document.querySelector("ul").appendChild(li);
     })
 
-    document.createElement("li");
+    
 
     
 
