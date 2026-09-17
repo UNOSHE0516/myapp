@@ -11,31 +11,41 @@
 
     <input id="input"  type="text">
 
-    <button id="add">追加</button><br>
-
+    <button id="add">追加</button> <button id="del">削除</button>
     <ul>
         <li></li>
-
-
     </ul>
 
-    <button id="del">削除</button>
-
-
-
+   
 <script>//「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
 
         //「新しい<li>要素を作って、それをliという名前で扱えるようにする」//
         const li = document.createElement("li");
+        //チェックボックスという名前で新しく作った。"input"になっている理由はチェックボックスはinputタイプだから//
+        const checkbox = document.createElement("input");
+         //タイプはチェックボックス//
+        checkbox.type = "checkbox";
+         
 
         //「id="input" の入力欄に入っている文字を取得して、その文字をliの中身として設定する」//
-        li.textContent = document.getElementById("input").value;
-
+        const text = document.getElementById("input").value;
+        li.appendChild(checkbox);
+        li.appendChild(document.createTextNode(text));
+        
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
+     
+
     })
 
+    //id=delがクリックされたら{ }の中の処理を実行する//
+    document.getElementById("del").addEventListener("click",function(){
+        //新しいulの要素を作った//
+        const ul = document.querySelector("ul");
+        //そのulの中に入っているものを削除する//
+        ul.removeChild(ul.lastElementChild);
+})
     
 
     
