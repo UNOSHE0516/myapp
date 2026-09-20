@@ -35,17 +35,27 @@
         
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
-     
 
     })
 
-    //id=delがクリックされたら{ }の中の処理を実行する//
-    document.getElementById("del").addEventListener("click",function(){
-        //新しいulの要素を作った//
+        //id=delがクリックされたら{ }の中の処理を実行する//
+        document.getElementById("del").addEventListener("click", function(){
+            //新しいulの要素を作った//
         const ul = document.querySelector("ul");
-        //そのulの中に入っているものを削除する//
-        ul.removeChild(ul.lastElementChild);
-})
+            //新しいliListの要素を作った//
+        const liList = ul.querySelectorAll("li");
+            ////
+        for (const li of liList) {
+
+        const checkbox = li.querySelector("input");
+
+        if (checkbox.checked) {
+            li.remove();
+        }
+
+    }
+});
+
     
 
     
