@@ -12,9 +12,7 @@
     <input id="input"  type="text">
 
     <button id="add">追加</button> <button id="del">削除</button>
-    <ul>
-        <li></li>
-    </ul>
+    <ul></ul>
 
    
 <script>//「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
@@ -42,12 +40,20 @@
         document.getElementById("del").addEventListener("click", function(){
             //新しいulの要素を作った//
         const ul = document.querySelector("ul");
-            //新しいliListの要素を作った//
+            //ulの中に入っているliを全て選択する//
         const liList = ul.querySelectorAll("li");
-            ////
+            //liの中にある選択したリストを一つずつ見ていく//
         for (const li of liList) {
-
+           
+            //checkboxという定数にliの中を調べた時に<input>タグ（チェックボックス）が付いているものをいれる//
+            //目では見えないけどチェックがついていると中では
+            // <li>　
+            // <input type="checkbox">　
+            // Java　
+            // </li>　
+            // ということが起きている
         const checkbox = li.querySelector("input");
+        console.log(checkbox);
 
         if (checkbox.checked) {
             li.remove();
