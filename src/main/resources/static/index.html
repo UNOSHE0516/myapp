@@ -30,6 +30,23 @@
         const text = document.getElementById("input").value;
         li.appendChild(checkbox);
         li.appendChild(document.createTextNode(text));
+
+    //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能//
+    //JavaScript       ───────→        Spring Boot
+    //fetch("/tasks")  ───────→  @PostMapping("/tasks")という関係//
+    fetch("/tasks", {
+        //データを送りますという意味//
+        method: "POST",
+        //これから送るデータはJSONという形式ですよという意味//
+        headers: {
+            "Content-Type": "application/json"
+        },
+    
+        body: JSON.stringify({
+        name: text
+    })
+    //まとめると「Spring Bootの /tasks に、POSTで、JSON形式の『name＝入力されたタスク名』を送ってください」となる//
+    });
         
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
@@ -61,10 +78,6 @@
 
     }
 });
-
-    
-
-    
 
 </script>
 
