@@ -1,4 +1,4 @@
-package com;
+package com.example.myapp;
 
 public class Task {
 
