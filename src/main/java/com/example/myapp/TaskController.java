@@ -2,13 +2,13 @@ package com.example.myapp;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//GetMappingを使うので必要//
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-//GetMappingを使うので必要//
-import org.springframework.web.bind.annotation.GetMapping;
+
+
 
 @RestController
 public class TaskController {
@@ -28,7 +28,7 @@ public class TaskController {
         return task;
     }
 
-    //画面に表示するために、ブラウザなどから /tasks にGETでアクセスされたら、この処理を実行する//
+    //画面に表示するために、Javascriptから /tasks にGETでアクセスされたら、この処理を実行する//
     @GetMapping("/tasks")
         public List<Task> getTasks() {
         return tasks;

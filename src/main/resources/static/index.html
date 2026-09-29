@@ -53,38 +53,54 @@
 
     })
 
-    //id=delがクリックされたら{ }の中の処理を実行する//
-    document.getElementById("del").addEventListener("click", function(){
+        //id=delがクリックされたら{ }の中の処理を実行する//
+        document.getElementById("del").addEventListener("click", function(){
             //新しいulの要素を作った//
             const ul = document.querySelector("ul");
                 //ulの中に入っているliを全て選択する//
             const liList = ul.querySelectorAll("li");
             //liの中にある選択したリストを一つずつ見ていく//
-        for (const li of liList) {
+            for (const li of liList) {
            
-            //checkboxという定数にliの中を調べた時に<input>タグ（チェックボックス）が付いているものをいれる//
-            //目では見えないけどチェックがついていると中では
-            // <li>　
-            // <input type="checkbox">　
-            // Java　
-            // </li>　
-            // ということが起きている
-            const checkbox = li.querySelector("input");
-            console.log(checkbox);
-            if (checkbox.checked) {
-                li.remove();
+                //checkboxという定数にliの中を調べた時に<input>タグ（チェックボックス）が付いているものをいれる//
+                //目では見えないけどチェックがついていると中では
+                // <li>　
+                // <input type="checkbox">　
+                // Java　
+                // </li>　
+                // ということが起きている
+                const checkbox = li.querySelector("input");
+                console.log(checkbox);
+                if (checkbox.checked) {
+                    li.remove();
+                }
+
             }
-
-        }
-    });
-
-    ///tasks にGETでデータをくださいという意味　fetch() は、何も指定しない場合はGETになる//
-    fetch("/tasks")
-        .then(response => response.json())
-        //その返ってきたデータを受け取る//
-        .then(tasks => {
-            console.log(tasks);
         });
+
+        ///tasks にGETでデータをくださいという意味　fetch() は、何も指定しない場合はGETになる//
+        fetch("/tasks")
+        //Javaからデータが返ってくると、responseという名前で、返ってきたものを受け取って、返ってきたデータをJavaScriptで扱える形にしてください//
+        .then(response => response.json())
+        //Javaから返ってきたデータを tasks という名前で受け取る//
+        //JavaScript側の tasks は、Javaから返ってきたデータを一時的に入れておく名前であってjavaのtasksとは別物。//
+        .then(tasks => {
+            //受け取った tasks の中身をコンソールに表示する//
+            console.log(tasks);
+
+             //tasks の中から、タスクを1個ずつ取り出して処理する//
+        for (const task of tasks) {
+            //HTMLの 何も中身が入っていない<li> を新しく1個作る。//
+            const li = document.createElement("li");
+            //ここで、一つ上で作った <li> にタスクの名前を入れる。//
+            li.textContent = task.name;
+            //HTMLの <ul> を探して、一つ上で作った <li> を中に追加する//
+            document.querySelector("ul").appendChild(li);
+        };
+        });
+       
+
+    
 </script>
 
 </body>
