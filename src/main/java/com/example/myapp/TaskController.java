@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+
 @RestController
 public class TaskController {
     //Taskを複数入れておく箱　「List<Task>」はTaskを複数入れられるリスト　<Task>は「このListにはTaskを入れます」と指定している。　tasksは箱の名前//
@@ -23,6 +24,8 @@ public class TaskController {
     //ブラウザで入力して追加した内容をパワーシェルに表示させる//
         System.out.println(task.getName());
 
+        //今tasksに入っている数を使って番号を設定する。1は0から始まるため//
+        task.setNumber(tasks.size() + 1);
         tasks.add(task);
 
         return task;
@@ -35,3 +38,4 @@ public class TaskController {
     }
 
 }
+
