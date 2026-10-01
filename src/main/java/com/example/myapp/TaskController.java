@@ -2,6 +2,8 @@ package com.example.myapp;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 //GetMappingを使うので必要//
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,7 @@ public class TaskController {
     //ブラウザで入力して追加した内容をパワーシェルに表示させる//
         System.out.println(task.getName());
 
-        //今tasksに入っている数を使って番号を設定する。1は0から始まるため//
+        //今tasksに入っている数を使って番号を設定する。1は0から始まるため。追加されるたびにタスクに番号が１プラスされた番号が付く//
         task.setNumber(tasks.size() + 1);
         tasks.add(task);
 
@@ -37,5 +39,10 @@ public class TaskController {
         return tasks;
     }
 
+    @DeleteMapping("/tasks")
+        public void deleteTask(@RequestBody Task task) {
+            tasks.removeIf(t -> t.getNumber() == task.getNumber());
+        }
 }
 
+   

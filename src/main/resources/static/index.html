@@ -24,16 +24,14 @@
         const checkbox = document.createElement("input");
          //タイプはチェックボックス//
         checkbox.type = "checkbox";
-         
-
         //「id="input" の入力欄に入っている文字を取得して、その文字をliの中身として設定する」//
         const text = document.getElementById("input").value;
         li.appendChild(checkbox);
         li.appendChild(document.createTextNode(text));
-
         //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能//
         //JavaScript       ───────→        Spring Boot
         //fetch("/tasks")  ───────→  @PostMapping("/tasks")という関係//
+
         fetch("/tasks", {
             //データを送りますという意味//
             method: "POST",
@@ -41,20 +39,16 @@
             headers: {
                 "Content-Type": "application/json"
             },
-        
             body: JSON.stringify({
             name: text
             })
         //まとめると「Spring Bootの /tasks に、POSTで、JSON形式の『name＝入力されたタスク名』を送ってください」となる//
         });
-        
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
-
     })
 
 
-       
         //id=delがクリックされたら{ }の中の処理を実行する//
         document.getElementById("del").addEventListener("click", function(){
             //新しいulの要素を作った//
@@ -63,7 +57,6 @@
             const liList = ul.querySelectorAll("li");
             //liの中にある選択したリストを一つずつ見ていく//
             for (const li of liList) {
-           
                 //checkboxという定数にliの中を調べた時に<input>タグ（チェックボックス）が付いているものをいれる//
                 //目では見えないけどチェックがついていると中では
                 // <li>　
@@ -74,10 +67,19 @@
                 const checkbox = li.querySelector("input");
                 console.log(checkbox);
                 if (checkbox.checked) {
+                    //チェックボックスの中のデータセットの中のナンバーをナンバーという名前の中に入れる//
+                   const number = checkbox.dataset.number;
                     //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能 ここでは削除のお願い//
-                    fetch("/tasks", { method: "DELETE" })
+                    fetch("/tasks", { method: "DELETE" ,
                     ////
+                      headers: {
+                        "Content-Type": "application/json"
+                        },
 
+                    body: JSON.stringify({
+                        number: number
+                    })
+                });
                     li.remove();
                 }
 
@@ -93,7 +95,6 @@
         .then(tasks => {
             //受け取った tasks の中身をコンソールに表示する//
             console.log(tasks);
-
              //tasks の中から、タスクを1個ずつ取り出して処理する//
         for (const task of tasks) {
             //liという定数に新しく作ったliという要素を入れる//
@@ -102,7 +103,8 @@
             const checkbox = document.createElement("input");
             //タイプはチェックボックス//
             checkbox.type = "checkbox";
-            //作ったliにチェックボックスを追加する//
+            //checkboxの中にあるdatasetの中のnumberに、task.numberを入れる//
+            checkbox.dataset.number = task.number;
             li.appendChild(checkbox);
             //さらにタスクにある名前をついかする//
             li.appendChild(document.createTextNode(task.name));
