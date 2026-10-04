@@ -43,7 +43,11 @@
             name: text
             })
         //まとめると「Spring Bootの /tasks に、POSTで、JSON形式の『name＝入力されたタスク名』を送ってください」となる//
-        });
+        })
+        .then(response => response.json())
+        .then(task => {
+        checkbox.dataset.number = task.number;
+        })
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
     })
