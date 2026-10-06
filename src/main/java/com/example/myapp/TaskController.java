@@ -2,6 +2,8 @@ package com.example.myapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 //GetMappingを使うので必要//
@@ -15,6 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TaskController {
+    private final JdbcTemplate jdbcTemplate;
+    public TaskController(JdbcTemplate jdbcTemplate) {
+        //JdbcTemplate = JavaからSQLを実行するための道具//
+    this.jdbcTemplate = jdbcTemplate;
+}
+
+
     //Taskを複数入れておく箱　「List<Task>」はTaskを複数入れられるリスト　<Task>は「このListにはTaskを入れます」と指定している。　tasksは箱の名前//
     //new ArrayList<>()空のリストを作ります//
      private List<Task> tasks = new ArrayList<>();
@@ -29,7 +38,13 @@ public class TaskController {
         //今tasksに入っている数を使って番号を設定する。1は0から始まるため。追加されるたびにタスクに番号が１プラスされた番号が付く//
         task.setNumber(tasks.size() + 1);
         tasks.add(task);
-
+        jdbcTemplate.update(
+        "INSERT INTO tasks (number, name, completed) VALUES (?, ?, ?)",
+            task.getNumber(),
+            task.getName(),
+            task.isCompleted()
+        );
+        System.out.println("MariaDBに保存しました");
         return task;
     }
 
