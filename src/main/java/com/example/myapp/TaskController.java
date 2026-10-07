@@ -50,8 +50,17 @@ public class TaskController {
 
     //画面に表示するために、Javascriptから /tasks にGETでアクセスされたら、この処理を実行する//
     @GetMapping("/tasks")
-        public List<Task> getTasks() {
-        return tasks;
+       public List<Task> getTasks() {
+
+    String sql = "SELECT number, name, completed FROM tasks";
+
+    return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Task task = new Task();
+            task.setNumber(rs.getInt("number"));
+            task.setName(rs.getString("name"));
+            task.setCompleted(rs.getBoolean("completed"));
+            return task;
+        });
     }
 
     @DeleteMapping("/tasks")
