@@ -44,7 +44,6 @@ public class TaskController {
             task.getName(),
             task.isCompleted()
         );
-        System.out.println("MariaDBに保存しました");
         return task;
     }
 
@@ -64,10 +63,12 @@ public class TaskController {
     }
 
     @DeleteMapping("/tasks")
-        public void deleteTask(@RequestBody Task task) {
-            //tasksの中を1個ずつ見て、番号が削除対象のtaskと同じなら削除する//
-            tasks.removeIf(t -> t.getNumber() == task.getNumber());
-        }
+       public void deleteTask(@RequestBody Task task) {
+        jdbcTemplate.update(
+            "DELETE FROM tasks WHERE number = ?",
+            task.getNumber()
+        );
+    }
 }
 
    
