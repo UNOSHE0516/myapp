@@ -11,7 +11,7 @@
 
     <input id="input"  type="text">
 
-    <button id="add">追加</button> <button id="del">削除</button>
+    <button id="add">追加</button><button id="complete">完了</button><button id="del">削除</button>
     <ul></ul>
 
    
@@ -26,8 +26,14 @@
         checkbox.type = "checkbox";
         //「id="input" の入力欄に入っている文字を取得して、その文字をliの中身として設定する」//
         const text = document.getElementById("input").value;
+      
         li.appendChild(checkbox);
-        li.appendChild(document.createTextNode(text));
+
+        const taskName = document.createElement("span");
+        taskName.className = "task-name";
+        taskName.textContent = text;
+
+        li.appendChild(taskName);
         //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能//
         //JavaScript       ───────→        Spring Boot
         //fetch("/tasks")  ───────→  @PostMapping("/tasks")という関係//
@@ -47,10 +53,48 @@
         .then(response => response.json())
         .then(task => {
         checkbox.dataset.number = task.number;
+        li.dataset.number = task.number;
         })
         //「ulを探して、さっき作ったliをulの子要素として追加する」//
         document.querySelector("ul").appendChild(li);
     })
+
+
+    
+        document.getElementById("complete").addEventListener("click", function() {
+            const liList = document.querySelectorAll("li");
+
+            for (const li of liList) {
+                const checkbox = li.querySelector("input");
+
+                if (checkbox.checked) {
+                    const number = checkbox.dataset.number;
+
+                    fetch("/tasks/complete", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            number: Number(number)
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("完了処理に失敗しました");
+                        }
+
+                        const taskName = li.querySelector(".task-name");
+                        taskName.style.textDecoration = "line-through";
+                        checkbox.checked = false;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert("完了処理に失敗しました");
+                    });
+                }
+            }
+        });
 
 
         //id=delがクリックされたら{ }の中の処理を実行する//
@@ -100,22 +144,28 @@
             //受け取った tasks の中身をコンソールに表示する//
             console.log(tasks);
              //tasks の中から、タスクを1個ずつ取り出して処理する//
-        for (const task of tasks) {
-            //liという定数に新しく作ったliという要素を入れる//
-            const li = document.createElement("li");
-            //checkboxという定数に新しくinputという要素をを入れる//
-            const checkbox = document.createElement("input");
-            //タイプはチェックボックス//
-            checkbox.type = "checkbox";
-            //checkboxの中にあるdatasetの中のnumberに、task.numberを入れる//
-            checkbox.dataset.number = task.number;
-            li.appendChild(checkbox);
-            //さらにタスクにある名前をついかする//
-            li.appendChild(document.createTextNode(task.name));
-            //ulを探して、その中に作ったliを追加する//
-            document.querySelector("ul").appendChild(li);
+                    
+            for (const task of tasks) {
+                const li = document.createElement("li");
+                const checkbox = document.createElement("input");
 
-        };
+                checkbox.type = "checkbox";
+                checkbox.dataset.number = task.number;
+
+                const taskName = document.createElement("span");
+                taskName.className = "task-name";
+                taskName.textContent = task.name;
+
+                if (task.completed) {
+                    taskName.style.textDecoration = "line-through";
+                }
+
+                li.dataset.number = task.number;
+                li.appendChild(checkbox);
+                li.appendChild(taskName);
+
+                document.querySelector("ul").appendChild(li);
+            }
         });
 
        

@@ -1,9 +1,8 @@
 package com.example.myapp;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 //GetMappingを使うので必要//
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-
 
 
 @RestController
@@ -26,7 +23,6 @@ public class TaskController {
 
     //Taskを複数入れておく箱　「List<Task>」はTaskを複数入れられるリスト　<Task>は「このListにはTaskを入れます」と指定している。　tasksは箱の名前//
     //new ArrayList<>()空のリストを作ります//
-     private List<Task> tasks = new ArrayList<>();
 
     ///tasks にタスクが送られてきたら、この処理をする//
     @PostMapping("/tasks")
@@ -36,8 +32,13 @@ public class TaskController {
         System.out.println(task.getName());
 
         //今tasksに入っている数を使って番号を設定する。1は0から始まるため。追加されるたびにタスクに番号が１プラスされた番号が付く//
-        task.setNumber(tasks.size() + 1);
-        tasks.add(task);
+            
+        Integer nextNumber = jdbcTemplate.queryForObject(
+            "SELECT COALESCE(MAX(number), 0) + 1 FROM tasks",
+            Integer.class
+        );
+
+        task.setNumber(nextNumber);
         jdbcTemplate.update(
         "INSERT INTO tasks (number, name, completed) VALUES (?, ?, ?)",
             task.getNumber(),
@@ -60,6 +61,18 @@ public class TaskController {
             task.setCompleted(rs.getBoolean("completed"));
             return task;
         });
+    }
+
+    //完了処理を受け付けるURLを決める//
+    @PostMapping("/tasks/complete")
+    public void completeTask(@RequestBody Task task) {
+        jdbcTemplate.update(
+            //DBの完了状態を変更する。　　指定した番号のタスクだけを変更する//
+            "UPDATE tasks SET completed = ? WHERE number = ?",
+            //完了状態にする//
+            true,
+            task.getNumber()
+        );
     }
 
     @DeleteMapping("/tasks")
