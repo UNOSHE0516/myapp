@@ -23,15 +23,19 @@
    
 <script>//「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
+        //trim()は文字の前後にある余分な空白を取り除く//
+        const text = document.getElementById("input").value.trim();
 
+        if (text === "") {
+            alert("タスク名を入力してください");
+            return;
+        }
         //「新しい<li>要素を作って、それをliという名前で扱えるようにする」//
         const li = document.createElement("li");
         //チェックボックスという名前で新しく作った。"input"になっている理由はチェックボックスはinputタイプだから//
         const checkbox = document.createElement("input");
          //タイプはチェックボックス//
         checkbox.type = "checkbox";
-        //「id="input" の入力欄に入っている文字を取得して、その文字をliの中身として設定する」//
-        const text = document.getElementById("input").value;
       
         li.appendChild(checkbox);
 
