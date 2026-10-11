@@ -19,9 +19,12 @@
 
     <button id="add">追加</button><button id="complete">完了</button><button id="del">削除</button>
     <ul></ul>
-
    
-<script>//「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
+<script>
+    // 編集中のタスク番号を覚えておく
+    let editingNumber = null;
+
+    //「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
         //trim()は文字の前後にある余分な空白を取り除く//
         const text = document.getElementById("input").value.trim();
@@ -36,8 +39,17 @@
         const checkbox = document.createElement("input");
          //タイプはチェックボックス//
         checkbox.type = "checkbox";
-      
         li.appendChild(checkbox);
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "編集";
+
+        editButton.addEventListener("click", function() {
+            document.getElementById("input").value = text;
+            editingNumber = li.dataset.number;
+        });
+
+        li.appendChild(editButton);
 
         const taskName = document.createElement("span");
         taskName.className = "task-name";
@@ -49,17 +61,23 @@
         //fetch("/tasks")  ───────→  @PostMapping("/tasks")という関係//
 
         fetch("/tasks", {
-            //データを送りますという意味//
+            //tasksにデータを送りますという意味//
             method: "POST",
-            //これから送るデータはJSONという形式ですよという意味//
+            //headers:これから送るデータはJSONという形式ですよという意味//
             headers: {
                 "Content-Type": "application/json"
             },
+            //body：実際に送るデータを入れる。//
+             //JSON.stringify()：JavaScriptのデータを、JSONという文字列の形式に変換する。//
             body: JSON.stringify({
             name: text
             })
         //まとめると「Spring Bootの /tasks に、POSTで、JSON形式の『name＝入力されたタスク名』を送ってください」となる//
         })
+        //ここからは、Java側から返事が戻ってきた後の処理//
+        //then:前の処理が終わったら、次の処理をする//
+        //response:javaから帰ってきた返事//
+        //json() は、その返事の本文をJSONデータとして読み取る処理//
         .then(response => response.json())
         .then(task => {
         checkbox.dataset.number = task.number;
@@ -129,7 +147,7 @@
                    const number = checkbox.dataset.number;
                     //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能 ここでは削除のお願い//
                     fetch("/tasks", { method: "DELETE" ,
-                    ////
+                
                       headers: {
                         "Content-Type": "application/json"
                         },
@@ -165,6 +183,14 @@
                 const taskName = document.createElement("span");
                 taskName.className = "task-name";
                 taskName.textContent = task.name;
+                const editButton = document.createElement("button");
+                editButton.textContent = "編集";
+
+                editButton.addEventListener("click", function() {
+                    document.getElementById("input").value = task.name;
+                    editingNumber = task.number;
+                    document.getElementById("add").textContent = "更新";
+                });
 
                 if (task.completed) {
                     taskName.style.textDecoration = "line-through";
@@ -172,6 +198,7 @@
 
                 li.dataset.number = task.number;
                 li.appendChild(checkbox);
+                li.appendChild(editButton);
                 li.appendChild(taskName);
 
                 document.querySelector("ul").appendChild(li);
