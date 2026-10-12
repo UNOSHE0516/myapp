@@ -82,6 +82,20 @@ public class TaskController {
             task.getNumber()
         );
     }
+
+    
+    //タスク名の更新処理
+    @PostMapping("/tasks/update")
+    public void updateTask(@RequestBody Task task) {
+        jdbcTemplate.update(
+            "UPDATE tasks SET name = ? WHERE number = ?",
+            task.getName(),
+            task.getNumber()
+        );
+    }
+
+  
+
 }
 
    
