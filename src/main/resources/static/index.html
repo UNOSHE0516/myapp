@@ -33,6 +33,43 @@
             alert("タスク名を入力してください");
             return;
         }
+
+        if (editingNumber !== null) {
+            fetch("/tasks/update", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    number: Number(editingNumber),
+                    name: text
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("更新に失敗しました");
+                }
+                const liList = document.querySelectorAll("li");
+
+                for (const li of liList) {
+                    if (Number(li.dataset.number) === Number(editingNumber)) {
+                        const taskName = li.querySelector(".task-name");
+                        taskName.textContent = text;
+                    }
+                }
+
+                editingNumber = null;
+                document.getElementById("input").value = "";
+                document.getElementById("add").textContent = "追加";
+            })
+            .catch(error => {
+                console.error(error);
+                alert("更新に失敗しました");
+            });
+
+            return;
+        }
+
         //「新しい<li>要素を作って、それをliという名前で扱えるようにする」//
         const li = document.createElement("li");
         //チェックボックスという名前で新しく作った。"input"になっている理由はチェックボックスはinputタイプだから//
@@ -45,9 +82,13 @@
         editButton.textContent = "編集";
 
         editButton.addEventListener("click", function() {
-            document.getElementById("input").value = text;
-            editingNumber = li.dataset.number;
-        });
+        const taskName = li.querySelector(".task-name");
+
+        document.getElementById("input").value = taskName.textContent;
+        editingNumber = li.dataset.number;
+        document.getElementById("add").textContent = "更新";
+    });
+    
 
         li.appendChild(editButton);
 
