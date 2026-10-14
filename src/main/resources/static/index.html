@@ -24,16 +24,16 @@
     // 編集中のタスク番号を覚えておく
     let editingNumber = null;
 
-    //「id="add" の要素がクリックされたら、{ } の中の処理を実行する」//
+//「追加」がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
         //trim()は文字の前後にある余分な空白を取り除く//
         const text = document.getElementById("input").value.trim();
-
+        //テキストに何も記載されていない時アラートを表示。===で比較の完全一致を表す。
         if (text === "") {
             alert("タスク名を入力してください");
             return;
         }
-
+       
         if (editingNumber !== null) {
             fetch("/tasks/update", {
                 method: "POST",
@@ -62,6 +62,7 @@
                 document.getElementById("input").value = "";
                 document.getElementById("add").textContent = "追加";
             })
+
             .catch(error => {
                 console.error(error);
                 alert("更新に失敗しました");
@@ -70,20 +71,21 @@
             return;
         }
 
-        //「新しい<li>要素を作って、それをliという名前で扱えるようにする」//
+        //「新しい<li>要素を作成//
         const li = document.createElement("li");
         //チェックボックスという名前で新しく作った。"input"になっている理由はチェックボックスはinputタイプだから//
         const checkbox = document.createElement("input");
          //タイプはチェックボックス//
         checkbox.type = "checkbox";
+        //liに追加した要素を戻り値として受け取る。append()では受け取れないため。
         li.appendChild(checkbox);
 
         const editButton = document.createElement("button");
         editButton.textContent = "編集";
 
+//編集ボタンををした時の処理
         editButton.addEventListener("click", function() {
         const taskName = li.querySelector(".task-name");
-
         document.getElementById("input").value = taskName.textContent;
         editingNumber = li.dataset.number;
         document.getElementById("add").textContent = "更新";
@@ -91,7 +93,6 @@
     
 
         li.appendChild(editButton);
-
         const taskName = document.createElement("span");
         taskName.className = "task-name";
         taskName.textContent = text;
@@ -129,7 +130,7 @@
     })
 
 
-    
+//「完了」ボタンがクリックされたときに、タスクの一覧を取得する処理    
         document.getElementById("complete").addEventListener("click", function() {
             const liList = document.querySelectorAll("li");
 
@@ -166,7 +167,7 @@
         });
 
 
-        //id=delがクリックされたら{ }の中の処理を実行する//
+//「削除」がクリックされたら{ }の中の処理を実行する//
         document.getElementById("del").addEventListener("click", function(){
             //新しいulの要素を作った//
             const ul = document.querySelector("ul");
