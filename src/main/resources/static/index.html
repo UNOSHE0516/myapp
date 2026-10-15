@@ -16,13 +16,21 @@
     <h1>MY Task App</h1>
 
     <input id="input"  type="text">
-
-    <button id="add">追加</button><button id="complete">完了</button><button id="del">削除</button>
+    
+    <button id="add">追加</button><button id="cancel" hidden>キャンセル</button><button id="complete">完了</button><button id="del">削除</button>
     <ul></ul>
    
 <script>
     // 編集中のタスク番号を覚えておく
     let editingNumber = null;
+
+     //キャンセルしたときの処理
+    document.getElementById("cancel").addEventListener("click", function() {
+        editingNumber = null;
+        document.getElementById("input").value = "";
+        document.getElementById("add").textContent = "追加";
+        document.getElementById("cancel").hidden = true;
+    });
 
 //「追加」がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
@@ -61,6 +69,7 @@
                 editingNumber = null;
                 document.getElementById("input").value = "";
                 document.getElementById("add").textContent = "追加";
+                document.getElementById("cancel").hidden = false;
             })
 
             .catch(error => {
@@ -89,7 +98,10 @@
         document.getElementById("input").value = taskName.textContent;
         editingNumber = li.dataset.number;
         document.getElementById("add").textContent = "更新";
+        document.getElementById("cancel").hidden = false;
     });
+   
+
     
 
         li.appendChild(editButton);
@@ -232,6 +244,7 @@
                     document.getElementById("input").value = task.name;
                     editingNumber = task.number;
                     document.getElementById("add").textContent = "更新";
+                    document.getElementById("cancel").hidden = false;
                 });
 
                 if (task.completed) {
