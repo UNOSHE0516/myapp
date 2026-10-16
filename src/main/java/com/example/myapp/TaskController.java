@@ -30,14 +30,13 @@ public class TaskController {
     public Task addTask(@RequestBody Task task) {
     //ブラウザで入力して追加した内容をパワーシェルに表示させる//
         System.out.println(task.getName());
-
-        //今tasksに入っている数を使って番号を設定する。1は0から始まるため。追加されるたびにタスクに番号が１プラスされた番号が付く//
-            
+        //今tasksに入っている数を使って番号を設定する。jdbcTemplate（という道具）.（の中にある）queryForObject（SQLを実行して、1つの値を取得する）//
         Integer nextNumber = jdbcTemplate.queryForObject(
+            //tasks テーブルの number 列から、最大の番号を探す(何もなければ0を使う)
             "SELECT COALESCE(MAX(number), 0) + 1 FROM tasks",
+            //整数型の Integer として受け取って。と指定
             Integer.class
         );
-
         task.setNumber(nextNumber);
         jdbcTemplate.update(
         "INSERT INTO tasks (number, name, completed) VALUES (?, ?, ?)",

@@ -58,25 +58,21 @@
                     throw new Error("更新に失敗しました");
                 }
                 const liList = document.querySelectorAll("li");
-
                 for (const li of liList) {
                     if (Number(li.dataset.number) === Number(editingNumber)) {
                         const taskName = li.querySelector(".task-name");
                         taskName.textContent = text;
                     }
                 }
-
                 editingNumber = null;
                 document.getElementById("input").value = "";
                 document.getElementById("add").textContent = "追加";
                 document.getElementById("cancel").hidden = false;
             })
-
             .catch(error => {
                 console.error(error);
                 alert("更新に失敗しました");
             });
-
             return;
         }
 
@@ -88,28 +84,23 @@
         checkbox.type = "checkbox";
         //liに追加した要素を戻り値として受け取る。append()では受け取れないため。
         li.appendChild(checkbox);
-
         const editButton = document.createElement("button");
         editButton.textContent = "編集";
 
 //編集ボタンををした時の処理
         editButton.addEventListener("click", function() {
-        const taskName = li.querySelector(".task-name");
-        document.getElementById("input").value = taskName.textContent;
-        editingNumber = li.dataset.number;
-        document.getElementById("add").textContent = "更新";
-        document.getElementById("cancel").hidden = false;
-    });
-   
-
-    
-
+            const taskName = li.querySelector(".task-name");
+            document.getElementById("input").value = taskName.textContent;
+            editingNumber = li.dataset.number;
+            document.getElementById("add").textContent = "更新";
+            document.getElementById("cancel").hidden = false;
+        });
         li.appendChild(editButton);
         const taskName = document.createElement("span");
         taskName.className = "task-name";
         taskName.textContent = text;
-
         li.appendChild(taskName);
+
         //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能//
         //JavaScript       ───────→        Spring Boot
         //fetch("/tasks")  ───────→  @PostMapping("/tasks")という関係//
@@ -137,7 +128,7 @@
         checkbox.dataset.number = task.number;
         li.dataset.number = task.number;
         })
-        //「ulを探して、さっき作ったliをulの子要素として追加する」//
+        //作成したliをulの子要素として追加し、画面に表示する
         document.querySelector("ul").appendChild(li);
     })
 
