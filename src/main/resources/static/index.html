@@ -125,7 +125,9 @@
         //json() は、その返事の本文をJSONデータとして読み取る処理//
         .then(response => response.json())
         .then(task => {
+        //ここで、さっきの response.json() が変換した結果を受け取る
         checkbox.dataset.number = task.number;
+        //チェックボックスに受け取った番号を覚えさせる
         li.dataset.number = task.number;
         })
         //作成したliをulの子要素として追加し、画面に表示する

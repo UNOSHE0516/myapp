@@ -38,7 +38,9 @@ public class TaskController {
             Integer.class
         );
         task.setNumber(nextNumber);
+        //タスクの情報をDBの tasks テーブルに新しく保存する。update:データベースのデータを追加・変更・削除するときに使う処理
         jdbcTemplate.update(
+            //? を使うことで、SQL文と実際に入れる値を分けて指定できる。
         "INSERT INTO tasks (number, name, completed) VALUES (?, ?, ?)",
             task.getNumber(),
             task.getName(),
@@ -69,8 +71,7 @@ public class TaskController {
             //DBの完了状態を変更する。　　指定した番号のタスクだけを変更する//
             "UPDATE tasks SET completed = ? WHERE number = ?",
             //完了状態にする//
-            true,
-            task.getNumber()
+            true,task.getNumber()
         );
     }
 
