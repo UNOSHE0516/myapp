@@ -138,10 +138,11 @@
 //「完了」ボタンがクリックされたときに、タスクの一覧を取得する処理    
         document.getElementById("complete").addEventListener("click", function() {
             const liList = document.querySelectorAll("li");
-
+            //of: Javaでいうforeachと同じ役割
             for (const li of liList) {
                 const checkbox = li.querySelector("input");
-
+                //チェックボックスにチェックが入っているかの確認
+                //checked: チェックが入っているかを表す機能。入っていたらtrue
                 if (checkbox.checked) {
                     const number = checkbox.dataset.number;
 
@@ -151,6 +152,7 @@
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
+                            //Number(): JavaのInteger.parseInt() に近い役割
                             number: Number(number)
                         })
                     })
@@ -226,10 +228,11 @@
 
                 checkbox.type = "checkbox";
                 checkbox.dataset.number = task.number;
-
+                //↓↓↓　<span class="task-name">Javaの勉強</span>こういう感じになる
                 const taskName = document.createElement("span");
                 taskName.className = "task-name";
                 taskName.textContent = task.name;
+                  //↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
                 const editButton = document.createElement("button");
                 editButton.textContent = "編集";
 
