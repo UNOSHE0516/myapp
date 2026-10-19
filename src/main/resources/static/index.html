@@ -132,6 +132,10 @@
         })
         //作成したliをulの子要素として追加し、画面に表示する
         document.querySelector("ul").appendChild(li);
+
+        document.getElementById("input").value = "";
+
+
     })
 
 
@@ -220,8 +224,8 @@
         .then(tasks => {
             //受け取った tasks の中身をコンソールに表示する//
             console.log(tasks);
-             //tasks の中から、タスクを1個ずつ取り出して処理する//
-                    
+            
+             //tasks の中から、タスクを1個ずつ取り出して処理する//        
             for (const task of tasks) {
                 const li = document.createElement("li");
                 const checkbox = document.createElement("input");
@@ -255,9 +259,6 @@
                 document.querySelector("ul").appendChild(li);
             }
         });
-
-       
-       
 
     
 </script>
