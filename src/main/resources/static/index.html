@@ -241,7 +241,8 @@
                 editButton.textContent = "編集";
 
                 editButton.addEventListener("click", function() {
-                    document.getElementById("input").value = task.name;
+                    const taskName = li.querySelector(".task-name");
+                    document.getElementById("input").value = taskName.textContent;
                     editingNumber = task.number;
                     document.getElementById("add").textContent = "更新";
                     document.getElementById("cancel").hidden = false;
