@@ -24,14 +24,6 @@
     // 編集中のタスク番号を覚えておく
     let editingNumber = null;
 
-     //キャンセルしたときの処理
-    document.getElementById("cancel").addEventListener("click", function() {
-        editingNumber = null;
-        document.getElementById("input").value = "";
-        document.getElementById("add").textContent = "追加";
-        document.getElementById("cancel").hidden = true;
-    });
-
 //「追加」がクリックされたら、{ } の中の処理を実行する」//
     document.getElementById("add").addEventListener("click",function(){
         //trim()は文字の前後にある余分な空白を取り除く//
@@ -75,7 +67,7 @@
             });
             return;
         }
-
+//編集についての処理
         //「新しい<li>要素を作成//
         const li = document.createElement("li");
         //チェックボックスという名前で新しく作った。"input"になっている理由はチェックボックスはinputタイプだから//
@@ -86,8 +78,12 @@
         li.appendChild(checkbox);
         const editButton = document.createElement("button");
         editButton.textContent = "編集";
-
-//編集ボタンををした時の処理
+        li.appendChild(editButton);
+        const taskName = document.createElement("span");
+        taskName.className = "task-name";
+        taskName.textContent = text;
+        li.appendChild(taskName);       
+        //編集ボタンををした時の処理
         editButton.addEventListener("click", function() {
             const taskName = li.querySelector(".task-name");
             document.getElementById("input").value = taskName.textContent;
@@ -95,11 +91,7 @@
             document.getElementById("add").textContent = "更新";
             document.getElementById("cancel").hidden = false;
         });
-        li.appendChild(editButton);
-        const taskName = document.createElement("span");
-        taskName.className = "task-name";
-        taskName.textContent = text;
-        li.appendChild(taskName);
+       
 
         //JavaScriptから、サーバー（Spring Boot）にお願いをするための機能//
         //JavaScript       ───────→        Spring Boot
@@ -241,6 +233,7 @@
                 editButton.textContent = "編集";
 
                 editButton.addEventListener("click", function() {
+                    //.task-nameの「.」はクラス名で探してという意味。クラス名「take-name」を探して。
                     const taskName = li.querySelector(".task-name");
                     document.getElementById("input").value = taskName.textContent;
                     editingNumber = task.number;
@@ -260,7 +253,13 @@
                 document.querySelector("ul").appendChild(li);
             }
         });
-
+//キャンセルしたときの処理
+        document.getElementById("cancel").addEventListener("click", function() {
+            editingNumber = null;
+            document.getElementById("input").value = "";
+            document.getElementById("add").textContent = "追加";
+            document.getElementById("cancel").hidden = true;
+        });
     
 </script>
 
